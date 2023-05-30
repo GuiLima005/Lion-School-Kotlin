@@ -16,5 +16,4 @@ class RetrofitFactory {
         return  retrofitFactory.create(CoursesService::class.java)
     }
 
-
 }
