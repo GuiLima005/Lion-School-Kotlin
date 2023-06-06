@@ -34,7 +34,9 @@ class AlunoActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting3("Android")
+//                    val foto = intent.getStringExtra("foto")
+                    val nomeAluno = intent.getStringExtra("nomeAluno")
+                    Greeting3(nomeAluno)
                 }
             }
         }
@@ -42,9 +44,12 @@ class AlunoActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting3(name: String) {
+fun Greeting3(nomeAluno: String?) {
 
     val context = LocalContext.current
+
+//    val foto = foto!!
+    val nomeAluno = nomeAluno!!
 
     Column(
         modifier = Modifier
@@ -111,7 +116,7 @@ fun Greeting3(name: String) {
 
             Text(
                 modifier = Modifier.padding(vertical = 25.dp),
-                text = "José Matheus da Silva Miranda",
+                text = nomeAluno,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -138,6 +143,6 @@ fun Greeting3(name: String) {
 @Composable
 fun DefaultPreview3() {
     LionSchoolTheme {
-        Greeting3("Android")
+        Greeting3("")
     }
 }

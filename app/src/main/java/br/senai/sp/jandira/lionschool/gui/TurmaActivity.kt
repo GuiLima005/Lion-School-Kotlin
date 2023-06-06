@@ -49,7 +49,9 @@ class TurmaActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     val siglaCurso = intent.getStringExtra("siglaCurso")
-                    Greeting2(siglaCurso)
+                    val nomeCurso = intent.getStringExtra("nomeCurso")
+
+                    Greeting2(siglaCurso, nomeCurso)
                 }
             }
         }
@@ -57,11 +59,13 @@ class TurmaActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting2(siglaCurso: String?) {
+fun Greeting2(siglaCurso: String?, nomeCurso: String?) {
 
     val context = LocalContext.current
 
     val siglaCurso = siglaCurso!!
+    val nomeCurso = nomeCurso!!
+
 
     val callAlunos = RetrofitFactory().getAlunosService().getCurso(siglaCurso)
 
@@ -138,7 +142,7 @@ fun Greeting2(siglaCurso: String?) {
         ) {
 
             Text(
-                text = "Desenvolvimento de sistemas",
+                text = nomeCurso,
                 fontSize = 42.sp,
                 color = Color.White,
                 textAlign = TextAlign.Center,
@@ -213,7 +217,13 @@ fun Greeting2(siglaCurso: String?) {
                         .clickable {
                             val intent = Intent(context, AlunoActivity::class.java)
                             context.startActivity(intent)
+                            intent.putExtra("foto", it.foto)
+                            intent.putExtra("nomeAluno", it.nome)
+                            Log.i("foto", "onFailure: ${it.foto}")
+                            Log.i("nome", "onFailure: ${it.nome}")
+
                         },
+
                     shape = RoundedCornerShape(
                         topStart = 30.dp,
                         topEnd = 30.dp,
@@ -239,7 +249,7 @@ fun Greeting2(siglaCurso: String?) {
                         }
 
 
-                        Log.i("Alunos", "${alunos}: ")
+                        Log.i("Alunos", "${it.nome}: ")
 
                         Column(
                             modifier = Modifier
@@ -300,6 +310,6 @@ private fun <T> Call<T>.enqueue(callback: Callback<StudentList>) {
 @Composable
 fun DefaultPreview2() {
     LionSchoolTheme {
-        Greeting2("Android")
+        Greeting2("Android", "")
     }
 }
