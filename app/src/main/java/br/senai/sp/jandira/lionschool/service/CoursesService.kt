@@ -20,11 +20,4 @@ interface CoursesService {
     @GET("cursos")
     fun getCourses(): Call<CoursesList>
 
-    @GET("alunos/curso?sigla={sigla}")
-    fun getAlunosCursos(@Query("sigla") sigla:String): Call<br.senai.sp.jandira.lionschool.model.Student>
-
-
-//    @GET("matricula?matricula={matricula}")
-//    fun GetNotaAluno(@Path("matricula") sigla:String): Call<br.senai.sp.jandira.lionschool.model.Registration>
-
 }

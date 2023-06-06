@@ -33,6 +33,7 @@ import br.senai.sp.jandira.lionschool.model.Student
 import br.senai.sp.jandira.lionschool.model.StudentList
 import br.senai.sp.jandira.lionschool.service.RetrofitFactory
 import br.senai.sp.jandira.lionschool.ui.theme.LionSchoolTheme
+import coil.compose.AsyncImage
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -47,7 +48,8 @@ class TurmaActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting2("Android")
+                    val siglaCurso = intent.getStringExtra("siglaCurso")
+                    Greeting2(siglaCurso)
                 }
             }
         }
@@ -55,13 +57,35 @@ class TurmaActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting2(name: String) {
+fun Greeting2(siglaCurso: String?) {
 
     val context = LocalContext.current
 
+    val siglaCurso = siglaCurso!!
+
+    val callAlunos = RetrofitFactory().getAlunosService().getCurso(siglaCurso)
+
     var alunos by remember {
-        mutableStateOf(listOf<Student>())
+        mutableStateOf(listOf<br.senai.sp.jandira.lionschool.model.Student>())
     }
+
+    //Call Alunos
+    callAlunos.enqueue(object : Callback<StudentList> {
+        override fun onResponse(
+            call: Call<StudentList>,
+            response: Response<StudentList>
+        ) {
+            //Duas exclamações seignificam que pode vir nulo
+            alunos = response.body()!!.alunos;
+        }
+
+        override fun onFailure(call: Call<StudentList>, t: Throwable) {
+            Log.i(
+                "ds2m",
+                "onFailure: ${t.message}"
+            )
+        }
+    })
 
 
     Column(
@@ -114,7 +138,7 @@ fun Greeting2(name: String) {
         ) {
 
             Text(
-                text = "Desenvolvimento de Sistemas",
+                text = "Desenvolvimento de sistemas",
                 fontSize = 42.sp,
                 color = Color.White,
                 textAlign = TextAlign.Center,
@@ -127,7 +151,7 @@ fun Greeting2(name: String) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 18.dp), horizontalArrangement = Arrangement.SpaceBetween
+                .padding(horizontal = 18.dp), horizontalArrangement = Arrangement.SpaceAround
         ) {
 
             Card(
@@ -138,7 +162,7 @@ fun Greeting2(name: String) {
             ) {
                 Text(
                     text = "Todos",
-                    fontSize = 15.sp,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
@@ -152,7 +176,7 @@ fun Greeting2(name: String) {
             ) {
                 Text(
                     text = "Cursando",
-                    fontSize = 15.sp,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
@@ -166,7 +190,7 @@ fun Greeting2(name: String) {
             ) {
                 Text(
                     text = "Finalizados",
-                    fontSize = 15.sp,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
@@ -174,59 +198,48 @@ fun Greeting2(name: String) {
 
         }
 
-        Spacer(modifier = Modifier.height(55.dp))
+        Spacer(modifier = Modifier.height(40.dp))
 
-        val call = RetrofitFactory().getCourseService().getAlunosCursos("DS")
 
-        call.enqueue(object : Callback<StudentList> {
-            override fun onResponse(
-                call: Call<StudentList>, response: Response<StudentList>
-            ) {
-                alunos = response.body()!!.alunos
-            }
+        LazyColumn() {
+            items(alunos) {
 
-            override fun onFailure(call: Call<StudentList>, t: Throwable) {
-                Log.i("Alunos", "onFailure: ${t.message}")
-            }
-
-        })
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(140.dp)
-                .padding(horizontal = 35.dp)
-                .clickable {
-                    val intent = Intent(context, AlunoActivity::class.java)
-                    context.startActivity(intent)
-                },
-            shape = RoundedCornerShape(
-                topStart = 30.dp,
-                topEnd = 30.dp,
-                bottomStart = 30.dp,
-                bottomEnd = 30.dp
-            ),
-            backgroundColor = Color.White,
-            border = BorderStroke(3.dp, Color.Black)
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 30.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
                 Card(
-                    shape = CircleShape
-
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(160.dp)
+                        .padding(horizontal = 35.dp)
+                        .padding(top = 15.dp)
+                        .clickable {
+                            val intent = Intent(context, AlunoActivity::class.java)
+                            context.startActivity(intent)
+                        },
+                    shape = RoundedCornerShape(
+                        topStart = 30.dp,
+                        topEnd = 30.dp,
+                        bottomStart = 30.dp,
+                        bottomEnd = 30.dp
+                    ),
+                    backgroundColor = Color.White,
+                    border = BorderStroke(3.dp, Color.Black)
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.aluno),
-                        contentDescription = null,
-                        modifier = Modifier.size(100.dp)
+                    Row(
+                        modifier = Modifier
+                            .padding(horizontal = 30.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Card(
+                            shape = CircleShape
 
-                    )
-                }
+                        ) {
 
-                LazyColumn() {
-                    items(alunos) {
+                            AsyncImage(model = it.foto, contentDescription = "Aluno",
+                            modifier = Modifier.size(100.dp))
+
+                        }
+
+
+                        Log.i("Alunos", "${alunos}: ")
 
                         Column(
                             modifier = Modifier
@@ -237,12 +250,18 @@ fun Greeting2(name: String) {
 
                             ) {
 
+                            val cor =  if (it.status == "Cursando") {
+                                Color(252, 191, 64)
+                            } else {
+                                Color(51, 71, 176)
+                            }
+
                             Text(
                                 modifier = Modifier.fillMaxWidth(),
                                 text = it.nome,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.Black,
+                                color = cor,
                                 textAlign = TextAlign.Center
 
                             )
@@ -252,26 +271,30 @@ fun Greeting2(name: String) {
                                 text = it.status,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 18.sp,
-                                color = Color.Black,
+                                color = cor,
                                 textAlign = TextAlign.Center
                             )
 
 
                         }
-                        
+
                     }
-                    
                 }
+
+
             }
+
         }
-
-
     }
 }
+
+
+
 
 private fun <T> Call<T>.enqueue(callback: Callback<StudentList>) {
 
 }
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

@@ -144,6 +144,8 @@ fun Greeting(name: String) {
                         .padding(top = 15.dp)
                         .clickable {
                             val intent = Intent(context, TurmaActivity::class.java)
+                            intent.putExtra("siglaCurso", it.sigla)
+                            intent.putExtra("nomeCurso", it.nome)
                             context.startActivity(intent)
                         },
                     shape = RoundedCornerShape(
