@@ -217,8 +217,7 @@ fun Greeting2(siglaCurso: String?, nomeCurso: String?) {
                         .clickable {
                             val intent = Intent(context, AlunoActivity::class.java)
                             context.startActivity(intent)
-                            intent.putExtra("foto", it.foto)
-                            intent.putExtra("nomeAluno", it.nome)
+                            intent.putExtra("matricula", it.matricula)
                             Log.i("foto", "onFailure: ${it.foto}")
                             Log.i("nome", "onFailure: ${it.nome}")
 
@@ -268,7 +267,7 @@ fun Greeting2(siglaCurso: String?, nomeCurso: String?) {
 
                             Text(
                                 modifier = Modifier.fillMaxWidth(),
-                                text = it.nome,
+                                text = "${it.nome}",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = cor,
@@ -278,7 +277,7 @@ fun Greeting2(siglaCurso: String?, nomeCurso: String?) {
 
                             Text(
                                 modifier = Modifier.fillMaxWidth(),
-                                text = it.status,
+                                text = "${it.status}",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 18.sp,
                                 color = cor,

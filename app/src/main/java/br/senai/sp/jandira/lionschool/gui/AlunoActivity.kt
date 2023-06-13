@@ -2,6 +2,7 @@ package br.senai.sp.jandira.lionschool.gui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -11,7 +12,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,6 +24,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.lionschool.R
 import br.senai.sp.jandira.lionschool.gui.ui.theme.LionSchoolTheme
+import br.senai.sp.jandira.lionschool.model.Disciplina
+import br.senai.sp.jandira.lionschool.model.Student
+import br.senai.sp.jandira.lionschool.model.StudentList
+import br.senai.sp.jandira.lionschool.service.RetrofitFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class AlunoActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,9 +42,9 @@ class AlunoActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-//                    val foto = intent.getStringExtra("foto")
-                    val nomeAluno = intent.getStringExtra("nomeAluno")
-                    Greeting3(nomeAluno)
+                    val matricula = intent.getStringExtra("matricula").toString()
+//
+                    Greeting3(matricula)
                 }
             }
         }
@@ -44,12 +52,43 @@ class AlunoActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting3(nomeAluno: String?) {
+fun Greeting3(matricula: String) {
+
+
+//    //    var context = LocalContext.current
+//    var alunos by remember {
+//        mutableStateOf(Student())
+//    }
+//
+//    var disciplinas by remember {
+//        mutableStateOf(listOf<Disciplina>())
+//    }
+//
+//    // Chamada para a API
+//    val call = RetrofitFactory().getAlunosService().getMatricula(matricula)
+//
+//    call.enqueue(object : Callback<Student> {
+//
+//        override fun onResponse(
+//            call: Call<Student>,
+//            response: Response<Student>
+//        ) {
+////            alunos.nome = response.body()!!.nome
+//            alunos = response.body()!!
+//            disciplinas = response.body()!!.curso?.get(0)!!.disciplinas!!
+//            Log.i("ds2m", "onResponse: ${alunos}")
+//        }
+//
+//        override fun onFailure(call: Call<Student>, t: Throwable) {
+//            Log.i(
+//                "ds2m",
+//                "onFailure: ${t.message} "
+//            )
+//        }
+//
+//    })
 
     val context = LocalContext.current
-
-//    val foto = foto!!
-    val nomeAluno = nomeAluno!!
 
     Column(
         modifier = Modifier
@@ -116,7 +155,7 @@ fun Greeting3(nomeAluno: String?) {
 
             Text(
                 modifier = Modifier.padding(vertical = 25.dp),
-                text = nomeAluno,
+                text = "José Matheus da Silva Miranda",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -143,6 +182,6 @@ fun Greeting3(nomeAluno: String?) {
 @Composable
 fun DefaultPreview3() {
     LionSchoolTheme {
-        Greeting3("")
+        Greeting3("Android")
     }
 }
