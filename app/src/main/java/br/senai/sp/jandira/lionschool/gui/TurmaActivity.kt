@@ -218,9 +218,7 @@ fun Greeting2(siglaCurso: String?, nomeCurso: String?) {
                             val intent = Intent(context, AlunoActivity::class.java)
                             context.startActivity(intent)
                             intent.putExtra("matricula", it.matricula)
-                            Log.i("foto", "onFailure: ${it.foto}")
-                            Log.i("nome", "onFailure: ${it.nome}")
-
+                            Log.i("foto", "onFailure: ${it.matricula}")
                         },
 
                     shape = RoundedCornerShape(

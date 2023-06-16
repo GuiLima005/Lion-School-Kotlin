@@ -2,7 +2,6 @@ package br.senai.sp.jandira.lionschool.service
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 class RetrofitFactory {
 
@@ -16,8 +15,8 @@ class RetrofitFactory {
         return  retrofitFactory.create(CoursesService::class.java)
     }
 
-    fun getAlunosService(): StudenteService{
-        return retrofitFactory.create(StudenteService::class.java)
+    fun getAlunosService(): StudentService{
+        return retrofitFactory.create(StudentService::class.java)
     }
 
 }

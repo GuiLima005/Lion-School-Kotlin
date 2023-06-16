@@ -2,35 +2,29 @@ package br.senai.sp.jandira.lionschool.gui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.lionschool.R
 import br.senai.sp.jandira.lionschool.gui.ui.theme.LionSchoolTheme
-import br.senai.sp.jandira.lionschool.model.Disciplina
-import br.senai.sp.jandira.lionschool.model.Student
-import br.senai.sp.jandira.lionschool.model.StudentList
-import br.senai.sp.jandira.lionschool.service.RetrofitFactory
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class AlunoActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,9 +36,7 @@ class AlunoActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    val matricula = intent.getStringExtra("matricula").toString()
-//
-                    Greeting3(matricula)
+                    Greeting3("Android")
                 }
             }
         }
@@ -52,50 +44,16 @@ class AlunoActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting3(matricula: String) {
+fun Greeting3(name: String) {
 
-
-//    //    var context = LocalContext.current
-//    var alunos by remember {
-//        mutableStateOf(Student())
-//    }
-//
-//    var disciplinas by remember {
-//        mutableStateOf(listOf<Disciplina>())
-//    }
-//
-//    // Chamada para a API
-//    val call = RetrofitFactory().getAlunosService().getMatricula(matricula)
-//
-//    call.enqueue(object : Callback<Student> {
-//
-//        override fun onResponse(
-//            call: Call<Student>,
-//            response: Response<Student>
-//        ) {
-////            alunos.nome = response.body()!!.nome
-//            alunos = response.body()!!
-//            disciplinas = response.body()!!.curso?.get(0)!!.disciplinas!!
-//            Log.i("ds2m", "onResponse: ${alunos}")
-//        }
-//
-//        override fun onFailure(call: Call<Student>, t: Throwable) {
-//            Log.i(
-//                "ds2m",
-//                "onFailure: ${t.message} "
-//            )
-//        }
-//
-//    })
-
-    val context = LocalContext.current
+    val context =LocalContext.current
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(51, 71, 176))
 
-    ) {
+    ){
 
         Spacer(modifier = Modifier.height(30.dp))
 
@@ -104,17 +62,17 @@ fun Greeting3(matricula: String) {
                 .fillMaxWidth()
                 .padding(horizontal = 30.dp),
             horizontalArrangement = Arrangement.SpaceBetween
-        ) {
+        ){
 
             Button(
-                onClick = {
+                onClick ={
                     val intent = Intent(context, TurmaActivity::class.java)
                     context.startActivity(intent)
-                }, 
+                },
                 colors = ButtonDefaults.buttonColors(Color(51, 71, 176))
-            ) {
+            ){
                 Image(
-                    painter = painterResource(id = R.drawable.voltar),
+                    painter =painterResource(id = R.drawable.voltar),
                     contentDescription = null
                 )
             }
@@ -127,7 +85,7 @@ fun Greeting3(matricula: String) {
             )
 
             Image(
-                painter = painterResource(id = R.drawable.logo_image), contentDescription = null
+                painter =painterResource(id = R.drawable.logo_image), contentDescription = null
             )
         }
 
@@ -139,14 +97,14 @@ fun Greeting3(matricula: String) {
                 .fillMaxWidth()
                 .padding(horizontal = 25.dp),
             horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        ){
 
             Card(
-                shape = CircleShape,
-                backgroundColor = Color(51, 71, 176),
-            ) {
+                shape =CircleShape,
+                backgroundColor =Color(51, 71, 176),
+            ){
                 Image(
-                    painter = painterResource(id = R.drawable.aluno),
+                    painter =painterResource(id = R.drawable.aluno),
                     contentDescription = null,
                     modifier = Modifier.size(200.dp)
 
@@ -169,13 +127,102 @@ fun Greeting3(matricula: String) {
             modifier = Modifier.fillMaxSize(),
             shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp),
             backgroundColor = Color.White
-        ) {
+        ){
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(20.dp)
+                    .background(
+                        Color(51, 71, 176),
+                    )) {
+
+                Column(
+                    modifier = Modifier
+                        .size(height = 350.dp, width = 55.dp)
+                        .padding(start = 10.dp, top = 20.dp, bottom = 10.dp, end = 10.dp)
+                        .background(
+                            Color(51, 71, 176),
+                        ),
+                        verticalArrangement = Arrangement.Center,
+                    )
+                {
+                    Text(text = "30",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        color = Color.White)
+                    Column(
+                        modifier = Modifier
+                            .size(height = 225.dp, width = 40.dp)
+                            .padding(horizontal = 5.dp, vertical = 10.dp)
+                            .background(Color(238,239,248)
+                            ),
+                            verticalArrangement = Arrangement.Bottom
+
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .size(height = 55.dp, width = 40.dp)
+
+                                .background(Color(192,16,16),
+                                    shape = RoundedCornerShape(topStart = 7.dp, topEnd = 7.dp))
+                        ) {
+                        }
+
+                    }
+                    Text(text = "PWBE",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        fontSize = 13.sp,
+                        color = Color.White)
+                }
+
+                Column(
+                    modifier = Modifier
+                        .size(height = 350.dp, width = 55.dp)
+                        .padding(start = 10.dp, top = 20.dp, bottom = 10.dp, end = 10.dp)
+                        .background(
+                            Color(51, 71, 176),
+                        ),
+                    verticalArrangement = Arrangement.Center,
+                )
+                {
+                    Text(text = "50",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        color = Color.White)
+                    Column(
+                        modifier = Modifier
+                            .size(height = 225.dp, width = 40.dp)
+                            .padding(horizontal = 5.dp, vertical = 10.dp)
+                            .background(Color(238,239,248)
+                            ),
+                        verticalArrangement = Arrangement.Bottom
+
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .size(height = 105.dp, width = 40.dp)
+
+                                .background(Color(229,182,87),
+                                    shape = RoundedCornerShape(topStart = 7.dp, topEnd = 7.dp))
+                        ) {
+                        }
+
+                    }
+                    Text(text = "LIMA",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        fontSize = 13.sp,
+                        color = Color.White)
+                }
+
+            }
 
         }
 
 
-
     }
+
 }
 
 @Preview(showBackground = true, showSystemUi = true)
